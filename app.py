@@ -5,14 +5,14 @@ from PIL import Image
 import cv2
 from utils.preprocess import preprocess_image
 
-# Load model
-model = tf.keras.models.load_model('model/defect_model.h5')
+# ✅ Load model from directory (not .h5 file)
+model = tf.keras.models.load_model('model/')
 labels = ['Defective', 'Non-Defective']
 
-# App UI
 st.title("📦 Visual Quality Check System")
-st.markdown("Upload a product image to classify it as **Defective** or **Non-Defective**.")
+st.markdown("Upload a product image to check if it's **Defective** or **Non-Defective**.")
 
+# File uploader
 uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
@@ -20,17 +20,17 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # Convert to OpenCV
+    # Convert to OpenCV format
     img_cv = np.array(image)
     if img_cv.shape[-1] == 4:
         img_cv = cv2.cvtColor(img_cv, cv2.COLOR_RGBA2BGR)
 
-    # Preprocess and Predict
-    processed = preprocess_image(img_cv)
+    # Preprocess and predict
+    processed = preprocess_image(img_cv)  # (1, 64, 64, 3)
     prediction = model.predict(processed)[0]
-    predicted_label = labels[np.argmax(prediction)]
+    label = labels[np.argmax(prediction)]
     confidence = np.max(prediction)
 
-    # Output
-    st.markdown(f"### ✅ Prediction: `{predicted_label}`")
+    # Display result
+    st.markdown(f"### ✅ Prediction: `{label}`")
     st.markdown(f"### 🔢 Confidence: `{confidence:.2f}`")
