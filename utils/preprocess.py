@@ -1,9 +1,8 @@
-import cv2
 import numpy as np
+from PIL import Image
 
-def preprocess_image(img, target_size=(64, 64)):
-    img = cv2.resize(img, target_size)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = img / 255.0
+def preprocess_image(img_array, target_size=(64, 64)):
+    img = Image.fromarray(img_array).resize(target_size)
+    img = np.array(img) / 255.0
     img = np.expand_dims(img, axis=0)
     return img
