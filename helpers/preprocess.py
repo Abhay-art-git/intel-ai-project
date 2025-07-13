@@ -1,8 +1,7 @@
 import numpy as np
-from PIL import Image
+import cv2
 
-def preprocess_image(img_array, target_size=(64, 64)):
-    img = Image.fromarray(img_array).resize(target_size)
-    img = np.array(img) / 255.0
-    img = np.expand_dims(img, axis=0)
-    return img
+def preprocess_image(image, target_size=(64, 64)):
+    resized = cv2.resize(image, target_size)
+    normalized = resized / 255.0
+    return np.expand_dims(normalized, axis=0)  # shape: (1, 64, 64, 3)
