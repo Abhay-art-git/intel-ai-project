@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from utils.preprocess import preprocess_image
+from helpers.preprocess import preprocess_image
 
 # Load model (SavedModel format)
 model = tf.keras.models.load_model('model/')
